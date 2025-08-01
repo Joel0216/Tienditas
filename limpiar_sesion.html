@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpiar Sesión</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🔧 Limpiar Sesión</h2>
+        <p>Esta página limpia el localStorage para evitar bucles de redireccionamiento.</p>
+        
+        <button class="btn" onclick="limpiarSesion()">Limpiar Sesión</button>
+        <button class="btn" onclick="irALogin()">Ir al Login</button>
+        
+        <div id="info" style="margin-top: 20px; padding: 10px; background: #f8f9fa; border-radius: 5px;">
+            <strong>Información actual:</strong><br>
+            <span id="tokenInfo"></span><br>
+            <span id="usuarioInfo"></span>
+        </div>
+    </div>
+
+    <script>
+        // Mostrar información actual
+        const token = localStorage.getItem('token');
+        const usuario = localStorage.getItem('usuario');
+        
+        document.getElementById('tokenInfo').textContent = `Token: ${token ? 'Presente' : 'No presente'}`;
+        document.getElementById('usuarioInfo').textContent = `Usuario: ${usuario ? JSON.parse(usuario).nombre || 'Sin nombre' : 'No presente'}`;
+        
+        function limpiarSesion() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('usuario');
+            alert('Sesión limpiada. Ahora puedes ir al login.');
+            location.reload();
+        }
+        
+        function irALogin() {
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html> 
