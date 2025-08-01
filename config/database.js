@@ -8,7 +8,7 @@ console.log('MYSQLPORT:', process.env.MYSQLPORT);
 console.log('MYSQLUSER:', process.env.MYSQLUSER);
 console.log('MYSQLDATABASE:', process.env.MYSQLDATABASE);
 
-// Configuración específica para Render.com
+// Configuración específica para Railway
 const dbConfig = {
   host: process.env.MYSQLHOST || 'yamanote.proxy.rlwy.net',
   port: parseInt(process.env.MYSQLPORT) || 25839,
@@ -21,7 +21,8 @@ const dbConfig = {
   ssl: {
     rejectUnauthorized: false
   },
-  connectTimeout: 60000
+  connectTimeout: 60000,
+  acquireTimeout: 60000
 };
 
 console.log('📡 Configuración final de base de datos:', {
