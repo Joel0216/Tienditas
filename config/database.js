@@ -2,17 +2,17 @@ const mysql = require('mysql2/promise');
 require('dotenv').config({ path: './config.env' });
 
 const dbConfig = {
-  host: process.env.MYSQLHOST,
-  port: process.env.MYSQLPORT,
-  user: process.env.MYSQLUSER,
-  password: process.env.MYSQLPASSWORD,
-  database: process.env.MYSQLDATABASE,
+  host: process.env.MYSQLHOST || 'yamanote.proxy.rlwy.net',
+  port: process.env.MYSQLPORT || 25839,
+  user: process.env.MYSQLUSER || 'root',
+  password: process.env.MYSQLPASSWORD || 'wEOqpNxfqYJZFcTmopEjspgSDyFdDOhJ',
+  database: process.env.MYSQLDATABASE || 'railway',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  ssl: process.env.NODE_ENV === 'production' ? {
+  ssl: {
     rejectUnauthorized: false
-  } : false,
+  },
   connectTimeout: 60000
 };
 

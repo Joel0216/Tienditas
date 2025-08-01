@@ -87,15 +87,15 @@ Tienditas/
 ### **Pasos de Instalación**
 
 1. **Clonar el repositorio**
-   ```bash
+```bash
    git clone https://github.com/Joel0216/Tienditas.git
-   cd Tienditas
-   ```
+cd Tienditas
+```
 
 2. **Instalar dependencias**
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
 3. **Configurar variables de entorno**
    - Crear archivo `config.env`
@@ -106,9 +106,9 @@ Tienditas/
    - Ejecutar `script_final_completo.sql`
 
 5. **Iniciar el servidor**
-   ```bash
-   npm start
-   ```
+```bash
+npm start
+```
 
 6. **Acceder a la aplicación**
    - Abrir navegador
