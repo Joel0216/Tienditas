@@ -468,38 +468,84 @@ function eliminarEmpleado(id) {
 
 // Ventas
 function cargarVentas() {
+    console.log('🔍 Cargando ventas...');
     fetch(`${API_BASE}/ventas`, {
         headers: { 'Authorization': `Bearer ${token}` }
     })
     .then(response => response.json())
     .then(data => {
+        console.log('📊 Datos de ventas recibidos:', data);
         if (data.success) {
-            mostrarVentas(data.data);
+            console.log('✅ Ventas cargadas exitosamente');
+            
+            // Manejar la estructura de datos anidada
+            let ventas = data.data;
+            if (Array.isArray(data.data) && data.data.length > 0 && Array.isArray(data.data[0])) {
+                ventas = data.data[0];
+                console.log('📝 Extraídas ventas del array anidado');
+            }
+            
+            console.log('📋 Lista de ventas procesadas:', ventas);
+            mostrarVentas(ventas);
+        } else {
+            console.error('❌ Error en respuesta de ventas:', data.message);
+            mostrarNotificacion('Error al cargar ventas', 'error');
         }
     })
     .catch(error => {
-        console.error('Error cargando ventas:', error);
+        console.error('💥 Error cargando ventas:', error);
         mostrarNotificacion('Error al cargar ventas', 'error');
     });
 }
 
 function mostrarVentas(ventas) {
+    console.log('🎨 Mostrando ventas en tabla...');
+    console.log('📋 Ventas a mostrar:', ventas);
+    
     const tbody = document.getElementById('tablaVentas');
     tbody.innerHTML = '';
     
-    ventas.forEach(venta => {
+    ventas.forEach((venta, index) => {
+        console.log(`📝 Procesando venta ${index + 1}:`, venta);
+        
+        // Debug de cada campo
+        console.log('  - fecha_venta:', venta.fecha_venta, 'tipo:', typeof venta.fecha_venta);
+        console.log('  - nombre_producto:', venta.nombre_producto);
+        console.log('  - cantidad_vendida:', venta.cantidad_vendida);
+        console.log('  - total:', venta.total);
+        console.log('  - metodo_pago:', venta.metodo_pago);
+        console.log('  - monto_pagado:', venta.monto_pagado);
+        console.log('  - cambio:', venta.cambio);
+        
+        // Formatear fecha de manera segura
+        let fechaFormateada = 'Fecha no disponible';
+        if (venta.fecha_venta) {
+            try {
+                const fecha = new Date(venta.fecha_venta);
+                if (!isNaN(fecha.getTime())) {
+                    fechaFormateada = fecha.toLocaleString('es-ES');
+                } else {
+                    console.warn('⚠️ Fecha inválida:', venta.fecha_venta);
+                }
+            } catch (error) {
+                console.error('❌ Error formateando fecha:', error);
+            }
+        }
+        
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${new Date(venta.fecha_venta).toLocaleString()}</td>
-            <td>${venta.nombre_producto}</td>
-            <td>${venta.cantidad_vendida}</td>
-            <td>$${venta.total}</td>
-            <td>${venta.metodo_pago}</td>
-            <td>$${venta.monto_pagado}</td>
-            <td>$${venta.cambio}</td>
+            <td>${fechaFormateada}</td>
+            <td>${venta.nombre_producto || 'Producto no disponible'}</td>
+            <td>${venta.cantidad_vendida || 0}</td>
+            <td>$${venta.total || 0}</td>
+            <td>${venta.metodo_pago || 'No especificado'}</td>
+            <td>$${venta.monto_pagado || 0}</td>
+            <td>$${venta.cambio || 0}</td>
         `;
         tbody.appendChild(row);
     });
+    
+    console.log('✅ Tabla de ventas actualizada');
 }
 
 function mostrarModalVenta() {

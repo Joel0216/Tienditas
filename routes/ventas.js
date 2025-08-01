@@ -6,12 +6,40 @@ const { verificarToken } = require('../middleware/auth');
 // Obtener todas las ventas del dueño
 router.get('/', verificarToken, async (req, res) => {
     try {
-        // Usar procedimiento almacenado para obtener ventas
-        const [rows] = await pool.execute('CALL sp_obtener_ventas_dueno(?)', [req.usuario.id_dueno]);
+        console.log('🔍 Obteniendo ventas para dueño:', req.usuario.id_dueno);
+        
+        // Usar pool.query en lugar de pool.execute
+        const query = `
+            SELECT 
+                v.id_venta,
+                v.fecha_venta,
+                v.cantidad_vendida,
+                v.precio_unitario,
+                v.total,
+                v.metodo_pago,
+                v.monto_pagado,
+                v.cambio,
+                p.nombre as nombre_producto,
+                e.nombre as nombre_empleado
+            FROM Venta v
+            LEFT JOIN Producto p ON v.id_producto = p.id_producto
+            LEFT JOIN Empleado e ON v.id_empleado = e.id_empleado
+            WHERE v.id_dueno = ?
+            ORDER BY v.fecha_venta DESC
+        `;
+        
+        const [rows] = await pool.query(query, [req.usuario.id_dueno]);
+        
+        console.log('📊 Ventas obtenidas de la base de datos:', rows);
+        console.log('📋 Número de ventas:', rows.length);
+        
+        if (rows.length > 0) {
+            console.log('📝 Primera venta como ejemplo:', rows[0]);
+        }
         
         res.json({ success: true, data: rows });
     } catch (error) {
-        console.error('Error al obtener ventas:', error);
+        console.error('❌ Error al obtener ventas:', error);
         res.status(500).json({ success: false, message: 'Error al obtener ventas' });
     }
 });
