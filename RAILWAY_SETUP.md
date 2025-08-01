@@ -118,3 +118,62 @@ Ejecutar el archivo `database.sql` en MySQL Workbench conectado a Railway:
 ---
 
 **¡La aplicación está lista para usar con Railway! 🎉** 
+
+# 🚂 Configuración de Railway para Render.com
+
+## 🔧 Problema
+Railway por defecto tiene restricciones de IP que impiden conexiones desde Render.com.
+
+## 🛠️ Solución
+
+### **Paso 1: Ir a Railway Dashboard**
+1. Ve a [railway.app](https://railway.app)
+2. Selecciona tu proyecto
+3. Ve a la pestaña "Settings"
+
+### **Paso 2: Configurar Variables de Entorno**
+1. En la sección "Variables", agrega:
+   ```
+   ALLOW_EXTERNAL_CONNECTIONS=true
+   ```
+
+### **Paso 3: Configurar Networking (si está disponible)**
+1. Ve a la pestaña "Networking"
+2. Busca la opción "Allow external connections"
+3. Actívala
+
+### **Paso 4: Verificar la configuración**
+1. Reinicia tu servicio en Railway
+2. Prueba la conexión desde Render.com
+
+## 🔄 Alternativa: Usar Railway para el despliegue completo
+
+Si no puedes configurar Railway, considera desplegar todo en Railway:
+
+### **Ventajas:**
+- ✅ Base de datos y aplicación en la misma red
+- ✅ Sin problemas de conectividad
+- ✅ Más fácil de configurar
+
+### **Pasos:**
+1. Ve a Railway Dashboard
+2. Crea un nuevo servicio "Web Service"
+3. Conecta tu repositorio de GitHub
+4. Configura las variables de entorno
+5. Despliega
+
+## 📋 Variables de Entorno para Railway
+
+```env
+PORT=3000
+JWT_SECRET=tu_jwt_secret_super_seguro_2024
+MYSQLHOST=mysql.railway.internal
+MYSQLPORT=3306
+MYSQLUSER=root
+MYSQLPASSWORD=wEOqpNxfqYJZFcTmopEjspgSDyFdDOhJ
+MYSQLDATABASE=railway
+```
+
+## 🎯 Recomendación
+
+**Usa Railway para todo el proyecto** - es más simple y confiable. 

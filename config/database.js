@@ -9,7 +9,13 @@ const dbConfig = {
   database: process.env.MYSQLDATABASE,
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
+  ssl: {
+    rejectUnauthorized: false
+  },
+  connectTimeout: 60000,
+  acquireTimeout: 60000,
+  timeout: 60000
 };
 
 const pool = mysql.createPool(dbConfig);
