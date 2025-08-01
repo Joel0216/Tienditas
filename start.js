@@ -2,7 +2,15 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const { testConnection } = require('./config/database');
+
+// Cargar variables de entorno
 require('dotenv').config({ path: './config.env' });
+
+// Debug: Mostrar variables de entorno en producción
+if (process.env.NODE_ENV === 'production') {
+  console.log('🚀 Modo producción detectado');
+  console.log('📡 Variables de entorno cargadas');
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
