@@ -10,6 +10,9 @@ require('dotenv').config({ path: './config.env' });
 if (process.env.NODE_ENV === 'production') {
   console.log('🚀 Modo producción detectado');
   console.log('📡 Variables de entorno cargadas');
+  console.log('🔍 Verificando configuración de base de datos...');
+  console.log('MYSQLHOST:', process.env.MYSQLHOST);
+  console.log('MYSQLPORT:', process.env.MYSQLPORT);
 }
 
 const app = express();

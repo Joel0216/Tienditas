@@ -8,6 +8,7 @@ console.log('MYSQLPORT:', process.env.MYSQLPORT);
 console.log('MYSQLUSER:', process.env.MYSQLUSER);
 console.log('MYSQLDATABASE:', process.env.MYSQLDATABASE);
 
+// Configuración específica para Render.com
 const dbConfig = {
   host: process.env.MYSQLHOST || 'yamanote.proxy.rlwy.net',
   port: parseInt(process.env.MYSQLPORT) || 25839,
@@ -29,6 +30,13 @@ console.log('📡 Configuración final de base de datos:', {
   user: dbConfig.user,
   database: dbConfig.database
 });
+
+// Verificar que no esté usando mysql.railway.internal
+if (dbConfig.host === 'mysql.railway.internal') {
+  console.error('❌ ERROR: mysql.railway.internal no es accesible desde Render.com');
+  console.error('💡 Usando host externo:', 'yamanote.proxy.rlwy.net');
+  dbConfig.host = 'yamanote.proxy.rlwy.net';
+}
 
 const pool = mysql.createPool(dbConfig);
 
