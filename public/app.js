@@ -94,10 +94,28 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Event listeners para limpiar campos al hacer clic
+    // Event listeners para inputs - NO limpiar automáticamente
     const inputs = document.querySelectorAll('input[type="email"], input[type="password"], input[type="text"]');
     inputs.forEach(input => {
-        // Solo limpiar al hacer clic si son datos pre-llenados
+        // Solo limpiar valores pre-llenados específicos, no todo
+        input.addEventListener('click', function() {
+            const preFilledValues = [
+                'Fermina Puc Tun',
+                'joelantoniopool@gmail.com',
+                '••••••••',
+                '••••••••••'
+            ];
+            
+            if (preFilledValues.includes(this.value)) {
+                this.value = '';
+            }
+        });
+        
+        // Prevenir que se borre al escribir
+        input.addEventListener('input', function(e) {
+            // No hacer nada, solo permitir escribir
+        });
+    });
         input.addEventListener('click', function() {
             if (this.value === 'joelantoniopool@gmail.com' || 
                 this.value === '••••••••' || 
@@ -134,36 +152,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Forzar limpieza adicional después de 1 segundo
+    // Limpieza suave solo al cargar la página
     setTimeout(() => {
-        limpiarFormularios();
-        // Limpiar específicamente los campos problemáticos
-        const camposProblematicos = [
-            'nombre', 'correo', 'password', 'confirm-password',
-            'correo-login', 'password-login',
-            'email-empleado', 'password-empleado'
+        // Solo limpiar valores pre-llenados específicos
+        const preFilledValues = [
+            'Fermina Puc Tun',
+            'joelantoniopool@gmail.com',
+            '••••••••',
+            '••••••••••'
         ];
         
-        camposProblematicos.forEach(id => {
-            const campo = document.getElementById(id);
-            if (campo) {
-                campo.value = '';
-                campo.setAttribute('autocomplete', 'off');
-                campo.removeAttribute('value');
+        document.querySelectorAll('input').forEach(input => {
+            if (preFilledValues.includes(input.value)) {
+                input.value = '';
             }
         });
-    }, 1000);
-    
-    // Limpieza adicional cada 5 segundos durante los primeros 30 segundos
-    let limpiezaCount2 = 0;
-    const limpiezaInterval2 = setInterval(() => {
-        if (limpiezaCount2 < 6) {
-            limpiarFormularios();
-            limpiezaCount2++;
-        } else {
-            clearInterval(limpiezaInterval2);
-        }
-    }, 5000);
+    }, 500);
     
     // Limpiar campos cuando se detecte acceso desde file://
     if (window.location.protocol === 'file:') {
@@ -396,6 +400,12 @@ async function loginDueno(e) {
     const correo = document.getElementById('correo-login').value;
     const password = document.getElementById('password-login').value;
     
+    // Validar que los campos no estén vacíos
+    if (!correo || !password) {
+        mostrarNotificacion('Por favor, completa todos los campos', 'error');
+        return;
+    }
+    
     try {
         const response = await fetch(`${API_BASE}/auth/login-dueno`, {
             method: 'POST',
@@ -408,15 +418,23 @@ async function loginDueno(e) {
         const data = await response.json();
         
         if (data.success) {
-            mostrarNotificacion('Inicio de sesión exitoso', 'success');
+            // Guardar datos de sesión
             localStorage.setItem('token', data.data.token);
             localStorage.setItem('usuario', JSON.stringify(data.data));
-            iniciarSesionDueno(data.data);
+            
+            // Mostrar notificación de éxito
+            mostrarNotificacion('Inicio de sesión exitoso', 'success');
+            
+            // Esperar un momento antes de redirigir
+            setTimeout(() => {
+                iniciarSesionDueno(data.data);
+            }, 1000);
         } else {
-            mostrarNotificacion(data.message, 'error');
+            mostrarNotificacion(data.message || 'Credenciales incorrectas', 'error');
         }
     } catch (error) {
-        mostrarNotificacion('Error al iniciar sesión', 'error');
+        console.error('Error en login:', error);
+        mostrarNotificacion('Error al conectar con el servidor', 'error');
     }
 }
 
@@ -478,12 +496,32 @@ async function verificarToken(tokenGuardado) {
 }
 
 function iniciarSesionDueno(usuario) {
-    usuarioActual = usuario;
-    token = usuario.token;
-    document.getElementById('nombre-dueno').textContent = usuario.nombre;
-    ocultarTodasLasPantallas();
-    document.getElementById('dashboard-dueno').classList.remove('d-none');
-    mostrarDashboard();
+    try {
+        // Guardar datos de sesión
+        usuarioActual = usuario;
+        token = usuario.token;
+        
+        // Verificar que el elemento existe antes de usarlo
+        const nombreElement = document.getElementById('nombre-dueno');
+        if (nombreElement) {
+            nombreElement.textContent = usuario.nombre;
+        }
+        
+        // Ocultar pantalla de login y mostrar dashboard
+        ocultarTodasLasPantallas();
+        const dashboardElement = document.getElementById('dashboard-dueno');
+        if (dashboardElement) {
+            dashboardElement.classList.remove('d-none');
+        }
+        
+        // Cargar dashboard
+        mostrarDashboard();
+        
+        console.log('✅ Sesión iniciada correctamente para:', usuario.nombre);
+    } catch (error) {
+        console.error('❌ Error al iniciar sesión:', error);
+        mostrarNotificacion('Error al iniciar sesión', 'error');
+    }
 }
 
 function iniciarSesionEmpleado(usuario) {
