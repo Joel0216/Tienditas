@@ -10,12 +10,10 @@ const dbConfig = {
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  ssl: {
+  ssl: process.env.NODE_ENV === 'production' ? {
     rejectUnauthorized: false
-  },
-  connectTimeout: 60000,
-  acquireTimeout: 60000,
-  timeout: 60000
+  } : false,
+  connectTimeout: 60000
 };
 
 const pool = mysql.createPool(dbConfig);
