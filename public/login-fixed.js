@@ -92,6 +92,8 @@ async function loginDueno(e) {
             // Esperar un momento antes de redirigir
             setTimeout(() => {
                 console.log('🔄 Redirigiendo al dashboard...');
+                console.log('Token guardado:', localStorage.getItem('token'));
+                console.log('Usuario guardado:', localStorage.getItem('usuario'));
                 window.location.href = '/dashboard.html';
             }, 1000);
         } else {

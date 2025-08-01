@@ -17,44 +17,10 @@ try {
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', function() {
-    if (!token) {
-        window.location.href = '/';
-        return;
-    }
+    console.log('🚀 Inicializando dashboard...');
     
-    // Verificar el tipo de usuario de manera más robusta
-    if (usuario) {
-        // Si el usuario tiene id_empleado, es un empleado
-        if (usuario.id_empleado && !usuario.id_dueño) {
-            window.location.href = '/empleado.html';
-            return;
-        }
-        // Si el usuario tiene id_dueño y no id_empleado, es un dueño
-        else if (usuario.id_dueño && !usuario.id_empleado) {
-            // Continuar con el dashboard del dueño
-        }
-        // Si tiene ambos o ninguno, verificar por el tipo
-        else if (usuario.tipo === 'empleado') {
-            window.location.href = '/empleado.html';
-            return;
-        }
-        else if (usuario.tipo === 'dueno') {
-            // Continuar con el dashboard del dueño
-        }
-        else {
-            // Si no se puede determinar, ir al login
-            localStorage.removeItem('token');
-            localStorage.removeItem('usuario');
-            window.location.href = '/';
-            return;
-        }
-    } else {
-        // Si no hay usuario, ir al login
-        localStorage.removeItem('token');
-        localStorage.removeItem('usuario');
-        window.location.href = '/';
-        return;
-    }
+    // La verificación de sesión se hace en session-check.js
+    // Si llegamos aquí, la sesión es válida
     
     mostrarNombreUsuario();
     cargarDashboard();

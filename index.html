@@ -97,7 +97,13 @@
             
             if (countdown <= 0) {
                 clearInterval(timer);
-                window.location.href = 'http://localhost:3002';
+                // Solo redirigir si no hay sesión activa
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    window.location.href = 'http://localhost:3002';
+                } else {
+                    console.log('✅ Sesión activa detectada, no redirigiendo');
+                }
             }
         }, 1000);
         
@@ -109,7 +115,12 @@
         // También permitir redirección manual
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
-                window.location.href = 'http://localhost:3002';
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    window.location.href = 'http://localhost:3002';
+                } else {
+                    console.log('✅ Sesión activa detectada, no redirigiendo');
+                }
             }
         });
     </script>
