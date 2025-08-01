@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Limpiar localStorage al cargar la página
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
-    
+
     // Verificar si hay un token guardado
     const tokenGuardado = localStorage.getItem('token');
     if (tokenGuardado) {
@@ -384,7 +384,7 @@ async function registrarDueno(e) {
             
             // Pequeño delay para que se vea la notificación antes de redirigir
             setTimeout(() => {
-                iniciarSesionDueno(data.data);
+            iniciarSesionDueno(data.data);
             }, 1500);
         } else {
             mostrarNotificacion(data.message, 'error');
@@ -427,7 +427,7 @@ async function loginDueno(e) {
             
             // Esperar un momento antes de redirigir
             setTimeout(() => {
-                iniciarSesionDueno(data.data);
+            iniciarSesionDueno(data.data);
             }, 1000);
         } else {
             mostrarNotificacion(data.message || 'Credenciales incorrectas', 'error');
@@ -498,8 +498,8 @@ async function verificarToken(tokenGuardado) {
 function iniciarSesionDueno(usuario) {
     try {
         // Guardar datos de sesión
-        usuarioActual = usuario;
-        token = usuario.token;
+    usuarioActual = usuario;
+    token = usuario.token;
         
         // Verificar que el elemento existe antes de usarlo
         const nombreElement = document.getElementById('nombre-dueno');
@@ -508,14 +508,14 @@ function iniciarSesionDueno(usuario) {
         }
         
         // Ocultar pantalla de login y mostrar dashboard
-        ocultarTodasLasPantallas();
+    ocultarTodasLasPantallas();
         const dashboardElement = document.getElementById('dashboard-dueno');
         if (dashboardElement) {
             dashboardElement.classList.remove('d-none');
         }
         
         // Cargar dashboard
-        mostrarDashboard();
+    mostrarDashboard();
         
         console.log('✅ Sesión iniciada correctamente para:', usuario.nombre);
     } catch (error) {
